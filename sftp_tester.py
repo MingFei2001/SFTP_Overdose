@@ -1,7 +1,6 @@
 import logging
 import os
-import random
-import string
+import tempfile
 import threading
 import time
 
@@ -47,9 +46,14 @@ class SFTPStressTester:
         threading.current_thread().name = thread_name
         logging.info(f"{thread_name} starting...")
 
-        # Generate a unique temporary local filename for each download attempt
+        # Generate a unique temporary local filename in the system's temp directory
         # to avoid conflicts between threads or successive downloads by the same thread.
-        local_download_file = f"downloaded_file_{thread_id}_{''.join(random.choices(string.ascii_lowercase, k=8))}.tmp"
+        # This file will be automatically deleted when closed.
+        temp_file = tempfile.NamedTemporaryFile(
+            delete=False, prefix=f"sftp_download_{thread_id}_", suffix=".tmp"
+        )
+        local_download_file = temp_file.name
+        temp_file.close()  # Close the file handle immediately, it will be opened again by sftp.get
 
         start_test_time_for_thread = time.time()
         while (

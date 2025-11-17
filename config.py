@@ -1,13 +1,18 @@
+import os
+
 # --- SFTP Server Configuration ---
-SFTP_HOSTNAME = "your_sftp_host"
+SFTP_HOSTNAME = "10.254.2.40"
 SFTP_PORT = 22
-SFTP_USERNAME = "your_username"
-SFTP_PASSWORD = "your_password"
+SFTP_USERNAME = "wwtadmin"
+SFTP_PASSWORD = os.getenv("SFTP_PASSWORD")
 
 # --- Test Specific Configuration ---
-REMOTE_DOWNLOAD_FILE_PATH = "/path/to/your/large_file.bin"
-REMOTE_FILE_SIZE_MB = 100  # Actual size in MB of the file at REMOTE_DOWNLOAD_FILE_PATH
+REMOTE_DOWNLOAD_FILE_PATH = "/test.pdf"
+REMOTE_FILE_SIZE_MB = 10.2  # Actual size in MB of the file at REMOTE_DOWNLOAD_FILE_PATH
 
 # --- Stress Test Parameters ---
-NUM_CONCURRENT_THREADS = 20
+NUM_CONCURRENT_THREADS = 5
 TEST_DURATION_SECONDS = 60
+
+# --- Logging Configuration ---
+LOG_FILE_PATH = "sftp_stress_test.log"  # Name of the log file

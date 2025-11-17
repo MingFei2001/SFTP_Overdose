@@ -5,6 +5,7 @@ import paramiko
 # Basic logging setup for this module (can be overridden by main)
 logging.getLogger(__name__).setLevel(logging.INFO)
 
+
 def connect_sftp(hostname, port, username, password):
     """
     Establishes a connection to an SFTP server using password authentication.
@@ -26,7 +27,6 @@ def connect_sftp(hostname, port, username, password):
         logging.error(f"SFTP connection failed for {hostname}: {e}")
         return None, f"SFTP connection failed: {e}"
 
-        return None, f"SFTP connection failed: {e}"
 
 def disconnect_sftp(sftp_client):
     """
@@ -35,7 +35,11 @@ def disconnect_sftp(sftp_client):
     if sftp_client:
         try:
             sftp_client.close()
-            if sftp_client.transport:
+            if (
+                hasattr(sftp_client, "transport")
+                and sftp_client.transport
+                and sftp_client.transport.is_active()
+            ):
                 sftp_client.transport.close()
             logging.debug("SFTP client and transport disconnected.")
         except Exception as e:

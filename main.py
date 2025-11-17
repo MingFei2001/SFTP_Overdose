@@ -1,6 +1,9 @@
 import logging
+import os
 
+# Import configuration and modules using relative paths for package execution
 from config import (
+    LOG_FILE_PATH,
     NUM_CONCURRENT_THREADS,
     REMOTE_DOWNLOAD_FILE_PATH,
     REMOTE_FILE_SIZE_MB,
@@ -10,16 +13,21 @@ from config import (
     SFTP_USERNAME,
     TEST_DURATION_SECONDS,
 )
-from sftp_connector import (  # Imported for validation/initial connection test
-    connect_sftp,
-    disconnect_sftp,
-)
+from sftp_connector import connect_sftp, disconnect_sftp
 from sftp_tester import SFTPStressTester
 
-# Centralized logging configuration for the main script
+# --- Centralized Logging Configuration ---
+log_directory = "logs"
+os.makedirs(log_directory, exist_ok=True)  # Ensure log directory exists
+full_log_path = os.path.join(log_directory, LOG_FILE_PATH)
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(threadName)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(full_log_path, mode="a"),  # Append to log file
+        logging.StreamHandler(),  # Output to console
+    ],
 )
 
 
@@ -28,15 +36,18 @@ def run_sftp_stress_test():
     Configures and runs the SFTP download stress test.
     """
     # Basic input validation from config.py
-    if (
-        SFTP_HOSTNAME == "your_sftp_host"
-        or SFTP_USERNAME == "your_username"
-        or SFTP_PASSWORD == "your_password"
-    ):
+    if SFTP_HOSTNAME == "your_sftp_host" or SFTP_USERNAME == "your_username":
         logging.error(
-            "Please update SFTP_HOSTNAME, SFTP_USERNAME, and SFTP_PASSWORD in SFTP_Overdose/config.py."
+            "Please update SFTP_HOSTNAME and SFTP_USERNAME in SFTP_Overdose/config.py."
         )
         return
+
+    if SFTP_PASSWORD is None:
+        logging.critical(
+            "SFTP_PASSWORD environment variable is not set. Please set it before running the script."
+        )
+        return
+
     if (
         REMOTE_DOWNLOAD_FILE_PATH == "/path/to/your/large_file.bin"
         or REMOTE_FILE_SIZE_MB == 100
