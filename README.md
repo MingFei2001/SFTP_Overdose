@@ -40,14 +40,31 @@ A Python-based tool to stress test an SFTP server by simulating multiple concurr
 
 ## 4. Configuration
 
-Edit `SFTP_Overdose/config.py` with your server and test details.
+Before running the script, export the following environment variables:
+
+**Linux/macOS:**
+```bash
+export SFTP_USERNAME="your_sftp_username"   # Replace with your SFTP username
+export SFTP_PASSWORD="your_sftp_password"   # Replace with your SFTP password
+```
+
+**Windows (Command Prompt):**
+```cmd
+set SFTP_USERNAME="your_sftp_username"   REM Replace with your SFTP username
+set SFTP_PASSWORD="your_sftp_password"   REM Replace with your SFTP password
+```
+**Windows (PowerShell):**
+```powershell
+$env:SFTP_USERNAME="your_sftp_username"   # Replace with your SFTP username
+$env:SFTP_PASSWORD="your_sftp_password"   # Replace with your SFTP password
+```
+
+Update the variable below in `config.py` to reflect your SFTP server and test parameters.
 
 ```SFTP_Overdose/config.py
 # --- SFTP Server Configuration ---
 SFTP_HOSTNAME = "your_sftp_host"  # REPLACE with hostname/IP
 SFTP_PORT = 22                   # REPLACE if non-standard
-SFTP_USERNAME = "your_username"  # REPLACE with username
-SFTP_PASSWORD = "your_password"  # REPLACE with password
 
 # --- Test Specific Configuration ---
 REMOTE_DOWNLOAD_FILE_PATH = "/path/to/your/large_file.bin" # REPLACE with exact remote file path
@@ -57,7 +74,7 @@ REMOTE_FILE_SIZE_MB = 100                                 # REPLACE with ACTUAL 
 NUM_CONCURRENT_THREADS = 20 # Number of simultaneous connections
 TEST_DURATION_SECONDS = 60  # Duration for worker threads
 ```
-**Ensure all `REPLACE` placeholders are updated before running.**
+**Ensure all `REPLACE` placeholders are updated and environment variables are set before running.**
 
 ## 5. Running the Test
 
