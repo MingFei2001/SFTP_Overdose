@@ -2,17 +2,6 @@
 
 A Python-based tool to stress test an SFTP server by simulating multiple concurrent download connections and measuring their performance. Ideal for evaluating NAS limits.
 
-## Table of Contents
-
-1.  [Features](#features)
-2.  [Prerequisites](#prerequisites)
-3.  [Setup & Installation](#setup--installation)
-4.  [Configuration](#configuration)
-5.  [Running the Test](#running-the-test)
-6.  [Interpreting Results](#interpreting-results)
-7.  [Project Structure](#project-structure)
-8.  [License](#license)
-
 ---
 
 ## 1. Features
