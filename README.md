@@ -1,2 +1,2 @@
 # SFTP_Overdose
-A script to stress test SFTP connection and test concurrent transfer limit and speed.
+A script to stress test SFTP connections and evaluate their concurrent transfer limits and performance.
