@@ -3,7 +3,6 @@ import os
 import tempfile
 import threading
 import time
-from random import random
 
 from sftp_connector import connect_sftp, disconnect_sftp
 
@@ -151,7 +150,7 @@ class SFTPStressTester:
             min_download_speed = min(self.download_speeds)
             max_download_speed = max(self.download_speeds)
 
-            logging.info(f"--- Download Speed Statistics ---")
+            logging.info("--- Download Speed Statistics ---")
             logging.info(f"  Overall Average Speed: {avg_download_speed:.2f} MB/s")
             logging.info(f"  Minimum Recorded Speed: {min_download_speed:.2f} MB/s")
             logging.info(f"  Maximum Recorded Speed: {max_download_speed:.2f} MB/s")
