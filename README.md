@@ -1,10 +1,8 @@
-# SFTP_Overdose - SFTP Download Stress Tester
+# SFTP_Overdose
 
-A Python-based tool to stress test an SFTP server by simulating multiple concurrent download connections and measuring their performance. Ideal for evaluating NAS limits.
+> A Python-based tool to stress test an SFTP server by simulating multiple concurrent download connections and measuring their performance. Ideal for evaluating NAS limits.
 
----
-
-## 1. Features
+## Features
 
 *   Simulates multiple concurrent SFTP downloads.
 *   Reports average, min, and max download speeds (MB/s).
@@ -14,14 +12,14 @@ A Python-based tool to stress test an SFTP server by simulating multiple concurr
 *   Automatic cleanup of temporary local files.
 *   Basic logging.
 
-## 2. Prerequisites
+## Prerequisites
 
 *   **Python 3.x** (Any modern Python 3.x version is suitable)
 *   **SFTP Server** with:
     *   Valid username/password.
     *   An existing large file at a known path, with its size in MB.
 
-## 3. Setup & Installation
+## Setup & Installation
 
 1.  **Navigate** to the project directory:
     ```bash
@@ -38,7 +36,7 @@ A Python-based tool to stress test an SFTP server by simulating multiple concurr
     ```
     (Deactivate with `deactivate` when done.)
 
-## 4. Configuration
+## Configuration
 
 Before running the script, export the following environment variables:
 
@@ -76,7 +74,7 @@ TEST_DURATION_SECONDS = 60  # Duration for worker threads
 ```
 **Ensure all `REPLACE` placeholders are updated and environment variables are set before running.**
 
-## 5. Running the Test
+## Running the Test
 
 After configuration, execute the main script:
 
@@ -85,7 +83,7 @@ python SFTP_Overdose/main.py
 ```
 The script will perform an initial connection test, then start multi-threaded downloads with real-time logging.
 
-## 6. Interpreting Results
+## Interpreting Results
 
 The script summarizes results after `TEST_DURATION_SECONDS`:
 
@@ -95,16 +93,5 @@ The script summarizes results after `TEST_DURATION_SECONDS`:
 
 High failures or degraded speeds indicate server/network/storage bottlenecks.
 
-## 7. Project Structure
-
-```
-SFTP_Overdose/
-├── config.py             # Configurable parameters.
-├── sftp_connector.py     # SFTP connection/disconnection logic.
-├── sftp_tester.py        # SFTPStressTester class for multi-threaded test.
-└── main.py               # Main entry point: loads config, runs test, displays results.
-```
-
-## 8. License
-
+## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for full details.
