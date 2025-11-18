@@ -11,7 +11,6 @@ from config import (
     SFTP_PASSWORD,
     SFTP_PORT,
     SFTP_USERNAME,
-    TEST_DURATION_SECONDS,
 )
 from sftp_connector import connect_sftp, disconnect_sftp
 from sftp_tester import SFTPStressTester
@@ -71,7 +70,7 @@ def run_sftp_stress_test():
 
     logging.info(
         f"Preparing SFTP download stress test with {NUM_CONCURRENT_THREADS} concurrent threads, "
-        f"targeting '{REMOTE_DOWNLOAD_FILE_PATH}' ({REMOTE_FILE_SIZE_MB}MB) for {TEST_DURATION_SECONDS} seconds."
+        f"targeting '{REMOTE_DOWNLOAD_FILE_PATH}' ({REMOTE_FILE_SIZE_MB}MB)."
     )
 
     tester = SFTPStressTester(
@@ -82,7 +81,6 @@ def run_sftp_stress_test():
         remote_file_path=REMOTE_DOWNLOAD_FILE_PATH,
         remote_file_size_mb=REMOTE_FILE_SIZE_MB,
         num_threads=NUM_CONCURRENT_THREADS,
-        test_duration_seconds=TEST_DURATION_SECONDS,
     )
     tester.start_test()
 

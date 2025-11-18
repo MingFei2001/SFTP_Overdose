@@ -11,8 +11,8 @@ REMOTE_DOWNLOAD_FILE_PATH = "/test.pdf"
 REMOTE_FILE_SIZE_MB = 10.2  # Actual size in MB of the file at REMOTE_DOWNLOAD_FILE_PATH
 
 # --- Stress Test Parameters ---
-NUM_CONCURRENT_THREADS = 5
-TEST_DURATION_SECONDS = 60
+NUM_CONCURRENT_THREADS = 15
+
 
 # --- Logging Configuration ---
 LOG_FILE_PATH = "sftp_stress_test.log"  # Name of the log file

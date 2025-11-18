@@ -3,6 +3,7 @@ import os
 import tempfile
 import threading
 import time
+from random import random
 
 from sftp_connector import connect_sftp, disconnect_sftp
 
@@ -55,75 +56,62 @@ class SFTPStressTester:
         local_download_file = temp_file.name
         temp_file.close()  # Close the file handle immediately, it will be opened again by sftp.get
 
-        start_test_time_for_thread = time.time()
-        while (
-            not self.stop_event.is_set()
-            and (time.time() - start_test_time_for_thread) < self.test_duration_seconds
-        ):
-            sftp = None
-            try:
-                # 1. Establish SFTP connection
-                sftp, error = connect_sftp(
-                    self.hostname, self.port, self.username, self.password
-                )
-                if error:
-                    # If connection fails, log error and increment failed counter
-                    raise Exception(error)  # Propagate error to the catch block
+        sftp = None
+        try:
+            # 1. Establish SFTP connection
+            sftp, error = connect_sftp(
+                self.hostname, self.port, self.username, self.password
+            )
+            if error:
+                # If connection fails, log error and increment failed counter
+                raise Exception(error)  # Propagate error to the catch block
 
-                logging.info(
-                    f"{thread_name} connected to SFTP server and ready to download."
-                )
+            logging.info(
+                f"{thread_name} connected to SFTP server and ready to download."
+            )
 
-                # 2. Perform Download and Measure Speed
-                logging.debug(
-                    f"{thread_name} attempting to download {self.remote_file_path} "
-                    f"({self.remote_file_size_mb}MB) to {local_download_file}..."
-                )
-                download_start_time = time.time()
-                sftp.get(self.remote_file_path, local_download_file)
-                download_end_time = time.time()
-                download_duration = download_end_time - download_start_time
+            # 2. Perform Download and Measure Speed
+            logging.debug(
+                f"{thread_name} attempting to download {self.remote_file_path} "
+                f"({self.remote_file_size_mb}MB) to {local_download_file}..."
+            )
+            download_start_time = time.time()
+            sftp.get(self.remote_file_path, local_download_file)
+            download_end_time = time.time()
+            download_duration = download_end_time - download_start_time
 
-                # Calculate speed, avoid division by zero
-                download_speed_mbps = (
-                    (self.remote_file_size_mb / download_duration)
-                    if download_duration > 0
-                    else 0
-                )
+            # Calculate speed, avoid division by zero
+            download_speed_mbps = (
+                (self.remote_file_size_mb / download_duration)
+                if download_duration > 0
+                else 0
+            )
 
-                # 3. Update shared metrics (thread-safe)
-                with self.lock:
-                    self.download_speeds.append(download_speed_mbps)
-                    self.successful_operations += 1
+            # 3. Update shared metrics (thread-safe)
+            with self.lock:
+                self.download_speeds.append(download_speed_mbps)
+                self.successful_operations += 1
 
-                logging.info(
-                    f"{thread_name} successfully downloaded {self.remote_file_path} "
-                    f"at {download_speed_mbps:.2f} MB/s."
-                )
+            logging.info(
+                f"{thread_name} successfully downloaded {self.remote_file_path} "
+                f"at {download_speed_mbps:.2f} MB/s."
+            )
 
-            except Exception as e:
-                logging.error(
-                    f"{thread_name} encountered an error during operation: {e}"
-                )
-                with self.lock:
-                    self.failed_operations += 1
-            finally:
-                # 4. Disconnect SFTP client
-                disconnect_sftp(sftp)
-                logging.debug(f"{thread_name} disconnected from SFTP server.")
+        except Exception as e:
+            logging.error(f"{thread_name} encountered an error during operation: {e}")
+            with self.lock:
+                self.failed_operations += 1
+        finally:
+            # 4. Disconnect SFTP client
+            disconnect_sftp(sftp)
+            logging.debug(f"{thread_name} disconnected from SFTP server.")
 
-                # 5. Clean up local downloaded file
-                if os.path.exists(local_download_file):
-                    os.remove(local_download_file)
-                    logging.debug(
-                        f"Cleaned up local temporary file: {local_download_file}"
-                    )
+            # 5. Clean up local downloaded file
+            if os.path.exists(local_download_file):
+                os.remove(local_download_file)
+                logging.debug(f"Cleaned up local temporary file: {local_download_file}")
 
-                # Small delay to prevent hammering the server too aggressively in a tight loop
-                # This also allows other threads to get CPU time.
-                time.sleep(1)
-
-        logging.info(f"{thread_name} finished its test duration.")
+        logging.info(f"{thread_name} finished.")
 
     def start_test(self):
         """
