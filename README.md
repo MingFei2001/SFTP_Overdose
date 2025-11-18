@@ -70,7 +70,6 @@ REMOTE_FILE_SIZE_MB = 100                                 # REPLACE with ACTUAL 
 
 # --- Stress Test Parameters ---
 NUM_CONCURRENT_THREADS = 20 # Number of simultaneous connections
-TEST_DURATION_SECONDS = 60  # Duration for worker threads
 ```
 **Ensure all `REPLACE` placeholders are updated and environment variables are set before running.**
 
